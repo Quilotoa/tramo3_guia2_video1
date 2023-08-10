@@ -5,6 +5,8 @@
  */
 package tramo3_guia2_video1;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Windows 10 OS
@@ -158,10 +160,21 @@ public class SumadorView extends javax.swing.JFrame {
 
     private void jBSumarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSumarActionPerformed
         // TODO add your handling code here:
+        
+        try{
+            
         int nro1=Integer.parseInt(jTNumeroUno.getText());
         int nro2=Integer.parseInt(jTNumeroDos.getText());
         int resultado=nro1+nro2;
         jLResultado.setText(resultado+"");
+        
+        }catch(NumberFormatException nf){
+            
+            JOptionPane.showMessageDialog(this, "Usted no ingreso un numero, ingresar solo entero");
+            jTNumeroUno.setText("");
+            jTNumeroDos.setText("");
+            jLResultado.setText("Resultado");
+        }
         
     }//GEN-LAST:event_jBSumarActionPerformed
 
