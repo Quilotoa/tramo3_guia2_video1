@@ -5,17 +5,38 @@
  */
 package ejemploTablasII;
 
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Windows 10 OS
  */
 public class TablaViewII extends javax.swing.JFrame {
+    private DefaultTableModel modelo = new DefaultTableModel(){
+        
+        public boolean isCellEditable(int fila, int columna){
+            //Para hacer editable una columna, por ejemplo la 2, se crea una condicion que la ponga en true
+            if(columna==2){
+                
+                return true;
+                
+            }
+            
+            //En caso de que todas las columnas no se puedan editar, se quita la condicion y se retorna false.
+            return false;
+        }
+        
+    };
+    
 
     /**
      * Creates new form TablaViewII
      */
     public TablaViewII() {
         initComponents();
+        armarCabecera();
+        cargarDatos();
     }
 
     /**
@@ -28,11 +49,17 @@ public class TablaViewII extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtAlumnos = new javax.swing.JTable();
+        jlMatricula = new javax.swing.JLabel();
+        jlApellido = new javax.swing.JLabel();
+        jlNombre = new javax.swing.JLabel();
+        jtMatricula = new javax.swing.JTextField();
+        jtApellido = new javax.swing.JTextField();
+        jtNombre = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtAlumnos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -43,7 +70,24 @@ public class TablaViewII extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jtAlumnos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtAlumnosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtAlumnos);
+
+        jlMatricula.setText("Matricula:");
+
+        jlApellido.setText("Apellido:");
+
+        jlNombre.setText("Nombre:");
+
+        jtMatricula.setEditable(false);
+
+        jtApellido.setEditable(false);
+
+        jtNombre.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -51,19 +95,62 @@ public class TablaViewII extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(54, 54, 54)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlApellido)
+                            .addComponent(jlMatricula)
+                            .addComponent(jlNombre))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+                            .addComponent(jtMatricula)
+                            .addComponent(jtApellido))))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(219, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(310, 310, 310)
+                        .addComponent(jtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlMatricula)
+                            .addComponent(jtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jlApellido)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jlNombre)
+                    .addComponent(jtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jtAlumnosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtAlumnosMouseClicked
+        // TODO add your handling code here:
+        
+        int filaSeleccionada = jtAlumnos.getSelectedRow();
+        if(filaSeleccionada!=-1){
+            
+            int matricula = (Integer) jtAlumnos.getValueAt(filaSeleccionada, 0);
+            String apellido = (String) jtAlumnos.getValueAt(filaSeleccionada, 1);
+            String nombre = (String) jtAlumnos.getValueAt(filaSeleccionada, 2);
+            jtMatricula.setText(matricula+"");
+            jtApellido.setText(apellido);
+            jtNombre.setText(nombre);
+            
+        }
+        
+    }//GEN-LAST:event_jtAlumnosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -102,6 +189,43 @@ public class TablaViewII extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel jlApellido;
+    private javax.swing.JLabel jlMatricula;
+    private javax.swing.JLabel jlNombre;
+    private javax.swing.JTable jtAlumnos;
+    private javax.swing.JTextField jtApellido;
+    private javax.swing.JTextField jtMatricula;
+    private javax.swing.JTextField jtNombre;
     // End of variables declaration//GEN-END:variables
+
+    private void armarCabecera(){
+        
+        modelo.addColumn("Matricula");
+        modelo.addColumn("Apellido");
+        modelo.addColumn("Nombre");
+        jtAlumnos.setModel(modelo);
+        
+    }
+    
+    
+    private void cargarDatos(){
+        
+        ArrayList<Alumno> lista = new ArrayList<>();
+        
+        lista.add(new Alumno(35,"Baltazar","Juanjo"));
+        lista.add(new Alumno(12,"Moreira","Marcelo"));
+        lista.add(new Alumno(128,"Guillen","Alberto"));
+        
+        for(Alumno alumno:lista){
+            
+            modelo.addRow(new Object[]{alumno.getMatricula(),
+            alumno.getApellido(), alumno.getNombre()});
+            
+        }
+    
+    }
+    
+    
+
+
 }
